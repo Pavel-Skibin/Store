@@ -9,18 +9,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class InMemoryProductRepository implements ProductRepository {
     private final Map<Integer, Product> products = new LinkedHashMap<>();
-    private final AtomicInteger idSequence = new AtomicInteger(1);
+    private int nextId = 1;
 
     @Override
     public Product save(Product product) {
         int id = product.getId();
         if (id <= 0) {
-            id = idSequence.getAndIncrement();
+            id = nextId++;
         }
         Product copy = new Product(id, product.getDepartmentId(), product.getName(), new BigDecimal(product.getPrice().toPlainString()));
         products.put(id, copy);

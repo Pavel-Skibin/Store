@@ -8,17 +8,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class InMemoryDepartmentRepository implements DepartmentRepository {
     private final Map<Integer, Department> departments = new LinkedHashMap<>();
-    private final AtomicInteger idSequence = new AtomicInteger(1);
+    private int nextId = 1;
 
     @Override
     public Department save(Department department) {
         int id = department.getId();
         if (id <= 0) {
-            id = idSequence.getAndIncrement();
+            id = nextId++;
         }
         Department copy = new Department(id, department.getName(), department.getOpenTime(), department.getCloseTime());
         departments.put(id, copy);
