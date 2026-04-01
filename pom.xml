@@ -7,7 +7,7 @@
     <groupId>org.nahap</groupId>
     <artifactId>Strore</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>Strore</name>
+    <name>Store</name>
     <packaging>war</packaging>
 
     <properties>
