@@ -11,6 +11,36 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class ConsoleMenu {
+    private enum MenuOption {
+        CREATE_DEPARTMENT(1, "Добавить отдел"),
+        UPDATE_DEPARTMENT(2, "Редактировать отдел"),
+        DELETE_DEPARTMENT(3, "Удалить отдел"),
+        CREATE_PRODUCT(4, "Добавить товар"),
+        UPDATE_PRODUCT(5, "Редактировать товар"),
+        DELETE_PRODUCT(6, "Удалить товар"),
+        SHOW_PRODUCTS_BY_DEPARTMENT(7, "Показать товары в отделе"),
+        SHOW_DEPARTMENTS_WITHOUT_PRODUCTS(8, "Показать отделы без товаров"),
+        SHOW_ALL_PRODUCTS(9, "Показать все товары"),
+        SHOW_ALL_DEPARTMENTS(10, "Показать все отделы"),
+        EXIT(0, "Выход");
+
+        private final int code;
+        private final String label;
+
+        MenuOption(int code, String label) {
+            this.code = code;
+            this.label = label;
+        }
+
+        int code() {
+            return code;
+        }
+
+        String label() {
+            return label;
+        }
+    }
+
     private final ConsoleInput input;
     private final DepartmentConsoleActions departmentActions;
     private final ProductConsoleActions productActions;
@@ -44,54 +74,54 @@ public class ConsoleMenu {
 
     private Map<Integer, ConsoleCommand> createCommands() {
         Map<Integer, ConsoleCommand> map = new LinkedHashMap<>();
-        map.put(1, () -> {
+        map.put(MenuOption.CREATE_DEPARTMENT.code(), () -> {
             departmentActions.createDepartment();
             return true;
         });
-        map.put(2, () -> {
+        map.put(MenuOption.UPDATE_DEPARTMENT.code(), () -> {
             departmentActions.showAllDepartments();
             departmentActions.updateDepartment();
             return true;
         });
-        map.put(3, () -> {
+        map.put(MenuOption.DELETE_DEPARTMENT.code(), () -> {
             departmentActions.showAllDepartments();
             departmentActions.deleteDepartment();
             return true;
         });
-        map.put(4, () -> {
+        map.put(MenuOption.CREATE_PRODUCT.code(), () -> {
             departmentActions.showAllDepartments();
             productActions.createProduct();
             return true;
         });
-        map.put(5, () -> {
+        map.put(MenuOption.UPDATE_PRODUCT.code(), () -> {
             productActions.showAllProducts();
             departmentActions.showAllDepartments();
             productActions.updateProduct();
             return true;
         });
-        map.put(6, () -> {
+        map.put(MenuOption.DELETE_PRODUCT.code(), () -> {
             productActions.showAllProducts();
             productActions.deleteProduct();
             return true;
         });
-        map.put(7, () -> {
+        map.put(MenuOption.SHOW_PRODUCTS_BY_DEPARTMENT.code(), () -> {
             departmentActions.showAllDepartments();
             productActions.showProductsByDepartment();
             return true;
         });
-        map.put(8, () -> {
+        map.put(MenuOption.SHOW_DEPARTMENTS_WITHOUT_PRODUCTS.code(), () -> {
             departmentActions.showDepartmentsWithoutProducts();
             return true;
         });
-        map.put(9, () -> {
+        map.put(MenuOption.SHOW_ALL_PRODUCTS.code(), () -> {
             productActions.showAllProducts();
             return true;
         });
-        map.put(10, () -> {
+        map.put(MenuOption.SHOW_ALL_DEPARTMENTS.code(), () -> {
             departmentActions.showAllDepartments();
             return true;
         });
-        map.put(0, () -> {
+        map.put(MenuOption.EXIT.code(), () -> {
             System.out.println("Выход");
             return false;
         });
@@ -99,16 +129,8 @@ public class ConsoleMenu {
     }
 
     private void printMenu() {
-        System.out.println("1. Добавить отдел");
-        System.out.println("2. Редактировать отдел");
-        System.out.println("3. Удалить отдел");
-        System.out.println("4. Добавить товар");
-        System.out.println("5. Редактировать товар");
-        System.out.println("6. Удалить товар");
-        System.out.println("7. Показать товары в отделе");
-        System.out.println("8. Показать отделы без товаров");
-        System.out.println("9. Показать все товары");
-        System.out.println("10. Показать все отделы");
-        System.out.println("0. Выход");
+        for (MenuOption option : MenuOption.values()) {
+            System.out.println(option.code() + ". " + option.label());
+        }
     }
 }

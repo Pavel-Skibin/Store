@@ -16,7 +16,7 @@ public class ConsoleInput {
     }
 
     public int readInt(String prompt) {
-        while (true) {
+        while (scanner.hasNextLine()) {
             System.out.print(prompt);
             String input = scanner.nextLine();
             try {
@@ -25,10 +25,11 @@ public class ConsoleInput {
                 System.out.println("Введите целое число");
             }
         }
+        throw new IllegalStateException("Input is not available");
     }
 
     public BigDecimal readPrice(String prompt) {
-        while (true) {
+        while (scanner.hasNextLine()) {
             System.out.print(prompt);
             String input = scanner.nextLine();
             try {
@@ -37,10 +38,11 @@ public class ConsoleInput {
                 System.out.println("Введите корректную цену");
             }
         }
+        throw new IllegalStateException("Input is not available");
     }
 
     public String readText(String prompt) {
-        while (true) {
+        while (scanner.hasNextLine()) {
             System.out.print(prompt);
             String input = scanner.nextLine();
             if (!input.trim().isEmpty()) {
@@ -48,10 +50,11 @@ public class ConsoleInput {
             }
             System.out.println("Поле не может быть пустым");
         }
+        throw new IllegalStateException("Input is not available");
     }
 
     public LocalTime readLocalTime(String prompt) {
-        while (true) {
+        while (scanner.hasNextLine()) {
             System.out.print(prompt);
             String input = scanner.nextLine();
             try {
@@ -60,6 +63,7 @@ public class ConsoleInput {
                 System.out.println("Введите время в формате HH:mm (например, 09:30)");
             }
         }
+        throw new IllegalStateException("Input is not available");
     }
 
     public DateTimeFormatter timeFormatter() {
