@@ -7,11 +7,16 @@ import java.sql.SQLException;
 import java.time.LocalTime;
 
 public final class DepartmentRowMapper {
+    private static final String COL_ID = "id";
+    private static final String COL_NAME = "name";
+    private static final String COL_OPEN_TIME = "open_time";
+    private static final String COL_CLOSE_TIME = "close_time";
+
     public Department map(ResultSet rs) throws SQLException {
-        int id = rs.getInt("id");
-        String name = rs.getString("name");
-        LocalTime openTime = rs.getTime("open_time").toLocalTime();
-        LocalTime closeTime = rs.getTime("close_time").toLocalTime();
+        int id = rs.getInt(COL_ID);
+        String name = rs.getString(COL_NAME);
+        LocalTime openTime = rs.getTime(COL_OPEN_TIME).toLocalTime();
+        LocalTime closeTime = rs.getTime(COL_CLOSE_TIME).toLocalTime();
         return new Department(id, name, openTime, closeTime);
     }
 }

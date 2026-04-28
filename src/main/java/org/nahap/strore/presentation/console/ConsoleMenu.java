@@ -12,28 +12,28 @@ import java.util.Scanner;
 
 public class ConsoleMenu {
     private enum MenuOption {
-        CREATE_DEPARTMENT(1, "Добавить отдел"),
-        UPDATE_DEPARTMENT(2, "Редактировать отдел"),
-        DELETE_DEPARTMENT(3, "Удалить отдел"),
-        CREATE_PRODUCT(4, "Добавить товар"),
-        UPDATE_PRODUCT(5, "Редактировать товар"),
-        DELETE_PRODUCT(6, "Удалить товар"),
-        SHOW_PRODUCTS_BY_DEPARTMENT(7, "Показать товары в отделе"),
-        SHOW_DEPARTMENTS_WITHOUT_PRODUCTS(8, "Показать отделы без товаров"),
-        SHOW_ALL_PRODUCTS(9, "Показать все товары"),
-        SHOW_ALL_DEPARTMENTS(10, "Показать все отделы"),
-        EXIT(0, "Выход");
+        CREATE_DEPARTMENT("create-department", "Добавить отдел"),
+        UPDATE_DEPARTMENT("update-department", "Редактировать отдел"),
+        DELETE_DEPARTMENT("delete-department", "Удалить отдел"),
+        CREATE_PRODUCT("create-product", "Добавить товар"),
+        UPDATE_PRODUCT("update-product", "Редактировать товар"),
+        DELETE_PRODUCT("delete-product", "Удалить товар"),
+        SHOW_PRODUCTS_BY_DEPARTMENT("show-products-by-department", "Показать товары в отделе"),
+        SHOW_DEPARTMENTS_WITHOUT_PRODUCTS("show-departments-without-products", "Показать отделы без товаров"),
+        SHOW_ALL_PRODUCTS("show-all-products", "Показать все товары"),
+        SHOW_ALL_DEPARTMENTS("show-all-departments", "Показать все отделы"),
+        EXIT("exit", "Выход");
 
-        private final int code;
+        private final String key;
         private final String label;
 
-        MenuOption(int code, String label) {
-            this.code = code;
+        MenuOption(String key, String label) {
+            this.key = key;
             this.label = label;
         }
 
-        int code() {
-            return code;
+        String key() {
+            return key;
         }
 
         String label() {
@@ -44,7 +44,7 @@ public class ConsoleMenu {
     private final ConsoleInput input;
     private final DepartmentConsoleActions departmentActions;
     private final ProductConsoleActions productActions;
-    private final Map<Integer, ConsoleCommand> commands;
+    private final Map<String, ConsoleCommand> commands;
 
     public ConsoleMenu(DepartmentService departmentService, ProductService productService) {
         this.input = new ConsoleInput(new Scanner(System.in));
@@ -57,7 +57,7 @@ public class ConsoleMenu {
         boolean running = true;
         while (running) {
             printMenu();
-            int command = input.readInt("Выберите действие: ");
+            String command = input.readText("Выберите действие: ").trim().toLowerCase();
             try {
                 ConsoleCommand menuCommand = commands.get(command);
                 if (menuCommand == null) {
@@ -72,56 +72,56 @@ public class ConsoleMenu {
         }
     }
 
-    private Map<Integer, ConsoleCommand> createCommands() {
-        Map<Integer, ConsoleCommand> map = new LinkedHashMap<>();
-        map.put(MenuOption.CREATE_DEPARTMENT.code(), () -> {
+    private Map<String, ConsoleCommand> createCommands() {
+        Map<String, ConsoleCommand> map = new LinkedHashMap<>();
+        map.put(MenuOption.CREATE_DEPARTMENT.key(), () -> {
             departmentActions.createDepartment();
             return true;
         });
-        map.put(MenuOption.UPDATE_DEPARTMENT.code(), () -> {
+        map.put(MenuOption.UPDATE_DEPARTMENT.key(), () -> {
             departmentActions.showAllDepartments();
             departmentActions.updateDepartment();
             return true;
         });
-        map.put(MenuOption.DELETE_DEPARTMENT.code(), () -> {
+        map.put(MenuOption.DELETE_DEPARTMENT.key(), () -> {
             departmentActions.showAllDepartments();
             departmentActions.deleteDepartment();
             return true;
         });
-        map.put(MenuOption.CREATE_PRODUCT.code(), () -> {
+        map.put(MenuOption.CREATE_PRODUCT.key(), () -> {
             departmentActions.showAllDepartments();
             productActions.createProduct();
             return true;
         });
-        map.put(MenuOption.UPDATE_PRODUCT.code(), () -> {
+        map.put(MenuOption.UPDATE_PRODUCT.key(), () -> {
             productActions.showAllProducts();
             departmentActions.showAllDepartments();
             productActions.updateProduct();
             return true;
         });
-        map.put(MenuOption.DELETE_PRODUCT.code(), () -> {
+        map.put(MenuOption.DELETE_PRODUCT.key(), () -> {
             productActions.showAllProducts();
             productActions.deleteProduct();
             return true;
         });
-        map.put(MenuOption.SHOW_PRODUCTS_BY_DEPARTMENT.code(), () -> {
+        map.put(MenuOption.SHOW_PRODUCTS_BY_DEPARTMENT.key(), () -> {
             departmentActions.showAllDepartments();
             productActions.showProductsByDepartment();
             return true;
         });
-        map.put(MenuOption.SHOW_DEPARTMENTS_WITHOUT_PRODUCTS.code(), () -> {
+        map.put(MenuOption.SHOW_DEPARTMENTS_WITHOUT_PRODUCTS.key(), () -> {
             departmentActions.showDepartmentsWithoutProducts();
             return true;
         });
-        map.put(MenuOption.SHOW_ALL_PRODUCTS.code(), () -> {
+        map.put(MenuOption.SHOW_ALL_PRODUCTS.key(), () -> {
             productActions.showAllProducts();
             return true;
         });
-        map.put(MenuOption.SHOW_ALL_DEPARTMENTS.code(), () -> {
+        map.put(MenuOption.SHOW_ALL_DEPARTMENTS.key(), () -> {
             departmentActions.showAllDepartments();
             return true;
         });
-        map.put(MenuOption.EXIT.code(), () -> {
+        map.put(MenuOption.EXIT.key(), () -> {
             System.out.println("Выход");
             return false;
         });
@@ -130,7 +130,7 @@ public class ConsoleMenu {
 
     private void printMenu() {
         for (MenuOption option : MenuOption.values()) {
-            System.out.println(option.code() + ". " + option.label());
+            System.out.println(option.key() + " - " + option.label());
         }
     }
 }

@@ -5,10 +5,11 @@ import org.nahap.strore.application.repository.ProductRepository;
 import org.nahap.strore.application.service.DepartmentService;
 import org.nahap.strore.application.service.ProductService;
 import org.nahap.strore.infrastructure.jdbc.config.DatabaseConfig;
+import org.nahap.strore.infrastructure.jdbc.config.DatabaseConfigLoader;
 import org.nahap.strore.infrastructure.jdbc.config.JdbcConnectionProvider;
+import org.nahap.strore.infrastructure.jdbc.migration.MigrationService;
 import org.nahap.strore.infrastructure.jdbc.repository.JdbcDepartmentRepository;
 import org.nahap.strore.infrastructure.jdbc.repository.JdbcProductRepository;
-import org.nahap.strore.infrastructure.jdbc.script.SqlScriptRunner;
 import org.nahap.strore.presentation.console.ConsoleMenu;
 
 public final class StoreConsoleMain {
@@ -16,11 +17,10 @@ public final class StoreConsoleMain {
     }
 
     public static void main(String[] args) {
-        DatabaseConfig config = DatabaseConfig.fromEnvironment();
+        DatabaseConfig config = DatabaseConfigLoader.load();
         JdbcConnectionProvider connectionProvider = new JdbcConnectionProvider(config);
-        SqlScriptRunner scriptRunner = new SqlScriptRunner(connectionProvider);
-        scriptRunner.runScript("sql/schema.sql");
-        scriptRunner.runScriptIfTableEmpty("department", "sql/seed.sql");
+        MigrationService migrationService = new MigrationService(connectionProvider);
+        migrationService.runMigrations();
 
         DepartmentRepository departmentRepository = new JdbcDepartmentRepository(connectionProvider);
         ProductRepository productRepository = new JdbcProductRepository(connectionProvider);
