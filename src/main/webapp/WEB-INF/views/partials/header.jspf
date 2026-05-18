@@ -1,0 +1,13 @@
+<%
+    String pageTitle = (String) request.getAttribute("pageTitle");
+    if (pageTitle == null || pageTitle.isBlank()) {
+        pageTitle = "Store";
+    }
+%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title><%= pageTitle %></title>
+</head>
+<body>

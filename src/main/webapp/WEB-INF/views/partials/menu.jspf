@@ -1,0 +1,10 @@
+<%
+    String ctx = request.getContextPath();
+%>
+<nav>
+    <a href="<%= ctx %>/app">Главная</a> |
+    <a href="<%= ctx %>/departments">Отделы</a> |
+    <a href="<%= ctx %>/products">Товары</a> |
+    <a href="<%= ctx %>/departments/without-products">Отделы без товаров</a>
+</nav>
+<hr/>
